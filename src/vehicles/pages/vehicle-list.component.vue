@@ -80,11 +80,18 @@
           :sortable="true"
           style="min-width: 16rem"
         ></pv-column>
-        <pv-column
-          field="image"
-          header="Image"
-          :sortable="true"
-          style="min-width: 16rem"></pv-column>
+
+        <pv-column header="Image">
+          <template #body="slotProps">
+            <img
+              :src="slotProps.data.image"
+              :alt="img-one"
+              class="w-6rem shadow-2 border-round"
+            />
+          </template>
+
+        </pv-column>
+
         <pv-column :exportable="false" style="min-width: 8rem">
           <template #body="slotProps">
             <pv-button
@@ -93,12 +100,15 @@
               @click="editVehicle(slotProps.data)"
             />
             <pv-button
+              header="Actions"
               icon="pi pi-trash"
               class="p-button-text p-button-rounded"
               @click="confirmDeleteVehicle(slotProps.data)"
             />
           </template>
         </pv-column>
+        
+        <!-- DIALOG CREATE -->
 
         <pv-dialog
           v-model:visible="vehicleDialog"

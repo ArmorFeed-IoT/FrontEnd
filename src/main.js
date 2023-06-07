@@ -23,6 +23,7 @@ import Rating from "primevue/rating";
 import Toast from "primevue/toast";
 import InputMask from "primevue/inputmask";
 import VueGoogleMaps from '@fawmi/vue-google-maps'
+import Image from 'primevue/image';
 import Store from "./store";
 
 //PrimeVue Styles
@@ -86,4 +87,5 @@ app.component("pv-checkbox", Checkbox);
 app.component("pv-overlay-panel", OverlayPanel);
 app.component("pv-timeline", Timeline);
 app.component("pv-scroll-panel", ScrollPanel);
+app.component("pv-image", Image);
 app.mount("#app");
