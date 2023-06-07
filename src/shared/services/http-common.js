@@ -1,6 +1,6 @@
 import axios from "axios";
 
 export default axios.create({
-  baseURL: "http://hbcordova-001-site1.htempurl.com/api/v1",
+  baseURL: "https://localhost:7017/api/v1/",
   headers: { "Content-type": "application/json" },
 });
