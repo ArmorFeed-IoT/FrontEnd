@@ -83,24 +83,18 @@
       </template>
     </pv-dialog>
     <pv-dialog v-model:visible="dialogEnabled">
-      <template #header>
-        <h3>Current Location</h3>
-      </template>
-      <img
-        src="https://www.esedeerre.com/wp-content/uploads/2012/06/geolocalizacion-google-maps.jpg"
-      />
-      <template #footer>
-        <pv-button label="Ok" autofocus @click="showDialog" />
-      </template>
+      <enterprise-shipments-location :enterpriseId="id"></enterprise-shipments-location>
     </pv-dialog>
   </div>
 </template>
 
 <script>
 import { EnterpriseShipmentsService } from "../services/enterprise-shipments.service";
+import EnterpriseShipmentsLocation from "./enterprise-shipments-location.vue";
 
 export default {
   name: "enterprise-shipments-list",
+  components: {EnterpriseShipmentsLocation},
   data() {
     return {
       enterpriseShipmentsService: null,

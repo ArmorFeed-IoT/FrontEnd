@@ -63,7 +63,7 @@
     <template #header>
       <h3>Current Location</h3>
     </template>
-    <customer-shipments-location/>
+    <customer-shipments-location :customerId="customerId"/>
     <template #footer>
       <pv-button label="Ok" autofocus @click="dialogEnabled = !dialogEnabled"/>
     </template>

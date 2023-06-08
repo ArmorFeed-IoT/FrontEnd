@@ -73,13 +73,7 @@
     </div>
   </div>
   <pv-dialog v-model:visible="dialogEnabled">
-    <template #header>
-      <h3>Current Location</h3>
-    </template>
-    <customer-shipments-location/>
-    <template #footer>
-      <pv-button label="Ok" autofocus @click="dialogEnabled = !dialogEnabled"/>
-    </template>
+  
   </pv-dialog>
 </template>
 
