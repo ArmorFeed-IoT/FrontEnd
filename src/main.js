@@ -55,7 +55,7 @@ app.use(Store);
 
 app.use(VueGoogleMaps, {
   load: {
-    key: '',
+    key: 'AIzaSyChT1S0OTVUDpsTtuoZ_G82r_XYA0pRyD0',
   },
 })
 
