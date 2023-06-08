@@ -18,5 +18,9 @@ class AuthService {
   registerEnterprise(user) {
     return userService.signUpEnterprise(user);
   }
+
+  registerShipmentDriver(user) {
+    return userService.signUpShipmentDriver(user);
+  }
 }
 export default new AuthService();

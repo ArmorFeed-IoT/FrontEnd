@@ -27,9 +27,7 @@ import { CommentsApiService } from "../../services/comments-api.service";
 
 export default {
   name: "view-comment",
-  props: {
-
-  },
+  props: {},
   data() {
     return {
       comments: [],
@@ -44,7 +42,7 @@ export default {
       sizeComments: 0,
       displayBoxComment: true,
       userId: null,
-      shipmentId: null
+      shipmentId: null,
     };
   },
   created() {
@@ -77,9 +75,9 @@ export default {
         customerId: displayableComment.customerId,
       };
     },
-    getCustomerId(){
-      const auth=JSON.parse(localStorage.getItem("auth"));
-      if(auth) {
+    getCustomerId() {
+      const auth = JSON.parse(localStorage.getItem("auth"));
+      if (auth) {
         this.userId = auth.id;
       }
     },

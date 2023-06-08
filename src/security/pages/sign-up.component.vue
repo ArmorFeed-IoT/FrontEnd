@@ -238,6 +238,10 @@ export default {
           label: "Make shipments",
           type: "enterprise",
         },
+        {
+          label: "Drive shipments",
+          type: "shipment-driver",
+        },
       ],
       isConfirm: false,
       submitted: false,
@@ -296,7 +300,7 @@ export default {
   },
   methods: {
     async signUpUser(newUser) {
-      await SignUpService.create(newUser)
+      await SignUpService.create(newUser, this.userType)
         .then((response) => {
           localStorage.setItem("auth", JSON.stringify(response.data));
         })
@@ -325,6 +329,17 @@ export default {
           photo: this.photo,
           lastname: this.lastname,
           subscriptionPlan: 0,
+        };
+      } else if (this.userType == "shipment-driver") {
+        return {
+          name: this.name,
+          photo: this.photo,
+          ruc: this.ruc.split(" ").join(""),
+          phoneNumber: this.cellPhone.split(" ").join(""),
+          description: this.description,
+          email: this.email,
+          password: this.password,
+          lastname: this.lastname,
         };
       }
       return {
@@ -359,6 +374,14 @@ export default {
           } else if (this.userType === "enterprise") {
             this.$store
               .dispatch("auth/registerEnterprise", newUser)
+              .then((response) => {
+                this.isConfirm = true;
+                this.resetForm();
+                console.log(response.data);
+              });
+          } else if (this.userType === "shipment-driver") {
+            this.$store
+              .dispatch("auth/registerShipmentDriver", newUser)
               .then((response) => {
                 this.isConfirm = true;
                 this.resetForm();

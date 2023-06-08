@@ -238,7 +238,7 @@ export default {
         this.nextPage(weight);
       }
     },
-  }
+  },
 };
 </script>
 

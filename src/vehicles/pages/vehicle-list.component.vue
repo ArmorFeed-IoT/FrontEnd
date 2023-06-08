@@ -1,7 +1,10 @@
 <template>
   <div class="container">
     <div class="flex flex-column space-between align-items-center">
-      <div class="my-7 flex flex-column" style="max-width: 65rem; width: 100%; margin: 0 auto; min-height: 90vh">
+      <div
+        class="my-7 flex flex-column"
+        style="max-width: 65rem; width: 100%; margin: 0 auto; min-height: 90vh"
+      >
         <pv-tool-bar class="toolbarButton mb-4">
           <template #start>
             <pv-button
@@ -12,6 +15,7 @@
             />
           </template>
         </pv-tool-bar>
+
         <pv-data-table
           style="max-width: 90rem"
           ref="dt"
@@ -28,16 +32,17 @@
         >
           <template #header>
             <div
-              class="table-header flex flex-column md:flex-row md:justify-content-between"
+              class="table-header flex flex-column md:flex-row md:justify-content-between table-color"
             >
-              <h5 class="mb-2 md:m-0 p-as-md-center text-xl">
+              <h5 class="ml-2 mb-2 md:m-3 p-as-md-center text-xl">
                 Manage vehicles
               </h5>
               <span class="p-input-icon-left">
                 <i class="pi pi-search" />
                 <pv-input-text
                   v-model="filters['global'].value"
-                  placeholder="Search..."
+                  placeholder="Keyword Search..."
+                  class="mr-2"
                 />
               </span>
             </div>
@@ -78,6 +83,17 @@
             :sortable="true"
             style="min-width: 16rem"
           ></pv-column>
+
+          <pv-column header="Image">
+            <template #body="slotProps">
+              <img
+                :src="slotProps.data.image"
+                :alt="img - one"
+                class="w-6rem shadow-2 border-round"
+              />
+            </template>
+          </pv-column>
+
           <pv-column :exportable="false" style="min-width: 8rem">
             <template #body="slotProps">
               <pv-button
@@ -86,6 +102,7 @@
                 @click="editVehicle(slotProps.data)"
               />
               <pv-button
+                header="Actions"
                 icon="pi pi-trash"
                 class="p-button-text p-button-rounded"
                 @click="confirmDeleteVehicle(slotProps.data)"
@@ -93,10 +110,12 @@
             </template>
           </pv-column>
 
+          <!-- DIALOG CREATE -->
+
           <pv-dialog
             v-model:visible="vehicleDialog"
             :style="{ width: '450px' }"
-            header="vehicle Information"
+            header="Vehicle Information"
             :modal="true"
             class="p-fluid"
           >
@@ -166,8 +185,21 @@
             </div>
             <div class="field">
               <span class="p-float-label">
+                <label class="ml-3" for="image">Image URL</label>
+                <pv-file-upload
+                  mode="basic"
+                  name="demo[]"
+                  url="/api/upload"
+                  accept="image/*"
+                  customUpload
+                  @upload="uploadImage"
+                >
+                </pv-file-upload>
+              </span>
+            </div>
+            <div class="field">
+              <span class="p-float-label">
                 <pv-calendar
-
                   id="maintenanceDate"
                   dateFormat="dd.mm.yy"
                   v-model="vehicle.maintenanceDate"
@@ -189,7 +221,7 @@
                 :options="types"
                 optionLabel="type"
                 optionValue="code"
-                placeholder="Vehicle Status"
+                placeholder="Vehicle Type"
               />
             </div>
             <template #footer>
@@ -279,6 +311,8 @@
 <script>
 import { FilterMatchMode } from "primevue/api";
 import { VehiclesApiService } from "../services/vehicle-api.service";
+import { Base64Manager } from "../../shared/services/base64-uploader.service.js";
+
 export default {
   name: "vehicle-list",
   components: {},
@@ -299,18 +333,21 @@ export default {
       selectedType: null,
       userId: null,
       types: [
-        { type: "In use", code: "In use" },
-        { type: "Free", code: "Free" },
+        { type: "Available", code: "Available" },
+        { type: "In Maintenance", code: "In Maintenance" },
+        { type: "Occupied", code: "Occupied" },
       ],
+      imageUploader: new Base64Manager(),
+      imageDataHandler: { data: null },
     };
   },
 
   created() {
-    const auth=JSON.parse(localStorage.getItem("auth"));
-    if(auth) {
-      this.userId = auth.id
+    const auth = JSON.parse(localStorage.getItem("auth"));
+    if (auth) {
+      this.userId = auth.id;
     }
-    console.log(this.userId)
+    console.log(this.userId);
     this.vehiclesService = new VehiclesApiService();
     this.vehiclesService
       .getVehiclesByEnterpriseId(this.userId)
@@ -321,6 +358,7 @@ export default {
       });
     this.initFilters();
   },
+
   methods: {
     getDisplayableVehicle(vehicle) {
       this.vehicle.id = vehicle.id;
@@ -335,6 +373,7 @@ export default {
         model: displayableVehicle.model,
         maintenanceDate: displayableVehicle.maintenanceDate,
         vehicleType: displayableVehicle.vehicleType,
+        image: this.imageDataHandler.data,
         enterpriseId: displayableVehicle.enterpriseId,
       };
     },
@@ -350,7 +389,18 @@ export default {
     findIndexById(id) {
       return this.vehicles.findIndex((vehicle) => vehicle.id === id);
     },
+
     saveVehicle() {
+      if (this.imageDataHandler === null) {
+        this.$toast.add({
+          severity: "Failed",
+          summary: "Failed to save vehicle",
+          detail: "Please upload an image",
+          life: 3000,
+        });
+        return;
+      }
+
       this.submitted = true;
       if (this.vehicle.brand.trim()) {
         if (this.vehicle.id) {
@@ -361,9 +411,9 @@ export default {
               this.vehicles[this.findIndexById(response.data.id)] =
                 this.getDisplayableVehicle(response.data);
               this.$toast.add({
-                severity: "success",
+                severity: "Success",
                 summary: "Successful",
-                detail: "vehicle Updated",
+                detail: "Vehicle Updated",
                 life: 3000,
               });
               console.log(response);
@@ -377,12 +427,13 @@ export default {
             this.vehicle = this.getDisplayableVehicle(response.data);
             this.vehicles.push(this.vehicle);
             this.$toast.add({
-              severity: "success",
+              severity: "Success",
               summary: "Successful",
-              detail: "vehicle Created",
+              detail: "Vehicle Created",
               life: 3000,
             });
             console.log(response);
+            this.imageDataHandler = null;
           });
         }
         this.vehicleDialog = false;
@@ -428,6 +479,9 @@ export default {
         global: { value: null, matchMode: FilterMatchMode.CONTAINS },
       };
     },
+    async uploadImage(event) {
+      await this.imageUploader.upload(event, this.imageDataHandler);
+    },
   },
 };
 </script>
@@ -441,5 +495,4 @@ export default {
   background-color: #e5eced;
   color: #fff;
 }
-
 </style>

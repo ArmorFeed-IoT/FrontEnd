@@ -22,8 +22,10 @@ import InputNumber from "primevue/inputnumber";
 import Rating from "primevue/rating";
 import Toast from "primevue/toast";
 import InputMask from "primevue/inputmask";
-import VueGoogleMaps from '@fawmi/vue-google-maps'
+import VueGoogleMaps from "@fawmi/vue-google-maps";
+import Image from "primevue/image";
 import Store from "./store";
+import FileUpload from "primevue/fileupload";
 
 //PrimeVue Styles
 import "/node_modules/primeflex/primeflex.css";
@@ -57,7 +59,7 @@ app.use(VueGoogleMaps, {
   load: {
     key: 'AIzaSyChT1S0OTVUDpsTtuoZ_G82r_XYA0pRyD0',
   },
-})
+});
 
 //PrimeVue Components
 app.component("pv-drop-down", Dropdown);
@@ -86,4 +88,6 @@ app.component("pv-checkbox", Checkbox);
 app.component("pv-overlay-panel", OverlayPanel);
 app.component("pv-timeline", Timeline);
 app.component("pv-scroll-panel", ScrollPanel);
+app.component("pv-image", Image);
+app.component("pv-file-upload", FileUpload);
 app.mount("#app");

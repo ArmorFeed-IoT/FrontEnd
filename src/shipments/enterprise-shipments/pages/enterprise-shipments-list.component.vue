@@ -14,6 +14,7 @@
       ></pv-column>
       <pv-column :exportable="false" style="min-width: 8rem">
         <template #body="slotProps">
+          <pv-button icon="pi pi-car" class="p-button-text p-button-rounded" />
           <pv-button
             icon="pi pi-pencil"
             class="p-button-text p-button-rounded"
@@ -122,16 +123,18 @@ export default {
   },
   created() {
     this.enterpriseShipmentsService = new EnterpriseShipmentsService();
-    this.enterpriseShipmentsService.getShipmentsById(this.id).then((response) => {
+    this.enterpriseShipmentsService
+      .getShipmentsById(this.id)
+      .then((response) => {
         this.shipments = response.data;
         this.currentShipments = this.shipments;
-        this.shipments.forEach( shipment => {
+        this.shipments.forEach((shipment) => {
           this.$dataTransfer.addEnterpriseShipmentId(shipment.id);
         });
       });
   },
   props: {
-    id: Number
+    id: Number,
   },
   methods: {
     filterContent(status) {
@@ -163,9 +166,12 @@ export default {
         this.shipment.status = this.shipment.status.value
           ? this.shipment.status.value
           : this.shipment.status;
-        this.enterpriseShipmentsService.updateShipment(this.shipment.id, this.shipment).then((response) => {
-            this.shipments[this.findIndexById(response.data.id)] = this.shipment;
-        });
+        this.enterpriseShipmentsService
+          .updateShipment(this.shipment.id, this.shipment)
+          .then((response) => {
+            this.shipments[this.findIndexById(response.data.id)] =
+              this.shipment;
+          });
       }
       this.statusEnabled = false;
       this.shipment = {};

@@ -47,6 +47,18 @@ export const auth = {
         }
       );
     },
+    registerShipmentDriver({ commit }, user) {
+      return AuthService.registerShipmentDriver(user).then(
+        (response) => {
+          commit("registerSuccess");
+          return Promise.resolve(response.data);
+        },
+        (error) => {
+          commit("registerFailure");
+          return Promise.reject(error);
+        }
+      );
+    },
   },
   mutations: {
     loginSuccess(state, user) {

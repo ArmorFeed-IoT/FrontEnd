@@ -16,7 +16,7 @@ export default {
   methods: {
     userLogged() {
       const auth = JSON.parse(localStorage.getItem("auth"));
-      console.log(auth)
+      console.log(auth);
       if (auth) {
         this.userId = auth.id;
         this.userType = auth.userType;
@@ -83,14 +83,14 @@ export default {
 <template>
   <div class="w-full">
     <app-navigation
-      v-bind:user-id="userId"
-      v-bind:user-type="userType"
-      v-bind:user-name="userName"
-      v-bind:navigation="navigation"
+      :userId="userId"
+      :userType="userType"
+      :userName="userName"
+      :navigation="navigation"
       :paramActiveTab="0"
-      v-on:sign-off="signOff"
+      @sign-off="signOff"
     ></app-navigation>
-    <router-view v-on:user-logged="userLogged"></router-view>
+    <router-view></router-view>
     <app-footer></app-footer>
   </div>
 </template>

@@ -92,7 +92,7 @@ export default {
       displayBoxComment: true,
       userId: null,
       shipmentId: null,
-      enterprise:{},
+      enterprise: {},
       customerShipmentsApiService: null,
       customerShipment: {},
     };
@@ -100,17 +100,17 @@ export default {
   created() {
     this.getCustomerId();
     this.getEnterpriseId();
-      this.commentsService = new CommentsApiService();
-      this.commentsService.getAll().then((response) => {
-        this.comments = response.data;
-        this.comments.forEach((comment) => this.getDisplayableComment(comment));
-        this.sizeComments = this.comments.length;
-        console.log(this.sizeComments, "size");
-        if (this.sizeComments === 0) {
-          this.displayBoxComment = false;
-        }
-      });
-      this.initFilters();
+    this.commentsService = new CommentsApiService();
+    this.commentsService.getAll().then((response) => {
+      this.comments = response.data;
+      this.comments.forEach((comment) => this.getDisplayableComment(comment));
+      this.sizeComments = this.comments.length;
+      console.log(this.sizeComments, "size");
+      if (this.sizeComments === 0) {
+        this.displayBoxComment = false;
+      }
+    });
+    this.initFilters();
   },
   mounted() {
     this.shipmentId = this.$route.params.id2;
@@ -129,19 +129,23 @@ export default {
         customerId: displayableComment.customerId,
       };
     },
-    getEnterpriseId(){
+    getEnterpriseId() {
       this.shipmentId = this.$route.params.id2;
       this.customerShipmentsApiService = new CustomerShipmentsApiService();
-      this.customerShipmentsApiService.getShipmentById(this.shipmentId).then( response => {
-        this.customerShipment = response.data;
-        this.customerShipmentsApiService.getEnterpriseById(this.customerShipment.enterpriseId).then( response => {
-          this.enterprise = response.data;
+      this.customerShipmentsApiService
+        .getShipmentById(this.shipmentId)
+        .then((response) => {
+          this.customerShipment = response.data;
+          this.customerShipmentsApiService
+            .getEnterpriseById(this.customerShipment.enterpriseId)
+            .then((response) => {
+              this.enterprise = response.data;
+            });
         });
-      });
     },
-    getCustomerId(){
-      const auth=JSON.parse(localStorage.getItem("auth"));
-      if(auth) {
+    getCustomerId() {
+      const auth = JSON.parse(localStorage.getItem("auth"));
+      if (auth) {
         this.userId = auth.id;
       }
     },
@@ -208,16 +212,14 @@ export default {
 </script>
 
 <style scoped>
-.main{
-  width:300px;
+.main {
+  width: 300px;
 }
 .p-inputtext-lg {
   height: 200px;
-
 }
 .card-comment {
   margin: 1px 0;
-
 }
 .scroll-comment {
   margin: 5px;
