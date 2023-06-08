@@ -6,11 +6,12 @@
 </template>
 
 <script>
+import { webSocketConnectionOptions } from '../../../shared/services/ws-common';
 export default {
     name: "enterprise-shipments-location",
     data() {
         return {
-            socketConnection: new WebSocket("ws://localhost:5017/ws/3"),
+            socketConnection: new WebSocket(`${webSocketConnectionOptions.baseURL}/ws/${this.enterpriseId}`),
             latitude: this.$dataTransfer.locationData.latitude,
             longitude: this.$dataTransfer.locationData.longitude,
             height: this.$dataTransfer.locationData.height
@@ -31,7 +32,9 @@ export default {
             console.log(data);
         }
     },
-    
+    props: {
+        enterpriseId: Number
+    }
 }
 </script>
 
