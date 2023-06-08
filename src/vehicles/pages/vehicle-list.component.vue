@@ -183,15 +183,16 @@
           </div>
           <div class="field">
             <span class="p-float-label">
-              <pv-input-text
-                type="textarea"
-                id="model"
-                v-model="vehicle.image"
-                required="false"
-                rows="2"
-                cols="20"
-              />
-              <label for="image">Image URL</label>
+              <label class="ml-3" for="image">Image URL</label>
+              <pv-file-upload
+                 mode="basic"
+                 name="demo[]"
+                 url="/api/upload"
+                 accept="image/*"
+                 customUpload
+                 @upload="uploadImage"
+              >
+              </pv-file-upload>
             </span>
           </div>
           <div class="field">
@@ -218,7 +219,7 @@
               :options="types"
               optionLabel="type"
               optionValue="code"
-              placeholder="Vehicle Status"
+              placeholder="Vehicle Type"
             />
           </div>
           <template #footer>
@@ -308,6 +309,7 @@
 <script>
 import { FilterMatchMode } from "primevue/api";
 import { VehiclesApiService } from "../services/vehicle-api.service";
+import { Base64Manager } from "../../shared/services/base64-uploader.service.js";
 
 export default {
   name: "vehicle-list",
@@ -333,6 +335,8 @@ export default {
         { type: "In Maintenance", code: "In Maintenance" },
         { type: "Occupied", code: "Occupied" },
       ],
+      imageUploader: new Base64Manager(),
+      imageDataHandler: {data: null},
     };
   },
 
@@ -367,7 +371,7 @@ export default {
         model: displayableVehicle.model,
         maintenanceDate: displayableVehicle.maintenanceDate,
         vehicleType: displayableVehicle.vehicleType,
-        image: displayableVehicle.image,
+        image: this.imageDataHandler.data,
         enterpriseId: displayableVehicle.enterpriseId,
       };
     },
@@ -383,7 +387,18 @@ export default {
     findIndexById(id) {
       return this.vehicles.findIndex((vehicle) => vehicle.id === id);
     },
+
     saveVehicle() {
+      if (this.imageDataHandler === null) {
+        this.$toast.add({
+          severity: "Failed",
+          summary: "Failed to save vehicle",
+          detail: "Please upload an image",
+          life: 3000,
+        });
+        return;
+      }
+
       this.submitted = true;
       if (this.vehicle.brand.trim()) {
         if (this.vehicle.id) {
@@ -416,6 +431,7 @@ export default {
               life: 3000,
             });
             console.log(response);
+            this.imageDataHandler = null;
           });
         }
         this.vehicleDialog = false;
@@ -461,6 +477,9 @@ export default {
         global: { value: null, matchMode: FilterMatchMode.CONTAINS },
       };
     },
+    async uploadImage(event){
+      await this.imageUploader.upload(event, this.imageDataHandler);
+    }
   },
 };
 </script>

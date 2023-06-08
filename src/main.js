@@ -25,6 +25,7 @@ import InputMask from "primevue/inputmask";
 import VueGoogleMaps from '@fawmi/vue-google-maps'
 import Image from 'primevue/image';
 import Store from "./store";
+import FileUpload from "primevue/fileupload";
 
 //PrimeVue Styles
 import "/node_modules/primeflex/primeflex.css";
@@ -88,4 +89,5 @@ app.component("pv-overlay-panel", OverlayPanel);
 app.component("pv-timeline", Timeline);
 app.component("pv-scroll-panel", ScrollPanel);
 app.component("pv-image", Image);
+app.component("pv-file-upload", FileUpload);
 app.mount("#app");

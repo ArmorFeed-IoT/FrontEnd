@@ -26,6 +26,7 @@
             {{ formatCurrency(slotProps.data.amount) }}
           </template>
         </pv-column>
+
         <template #groupheader="slotProps">
           <div class="group-header">
             <div class="group-header-container">
@@ -43,6 +44,8 @@
             </div>
           </div>
         </template>
+
+        <pv-column field="status" header="Status" class="bg-gray-200 border-primary"></pv-column>
 
 
       </pv-data-table>
@@ -69,6 +72,12 @@ export default {
       monthNames: ["January", "February", "March", "April", "May", "June",
         "July", "August", "September", "October", "November", "December"
       ],
+
+      status: [
+        { type: "Registered", code: "Registered" },
+        { type: "Collected", code: "Collected" },
+      ],
+
       contact: ''
     };
   },
@@ -79,8 +88,6 @@ export default {
     this.enterpriseShipmentService = new EnterpriseShipmentsService();
     this.customerShipmentService = new CustomerShipmentsApiService();
     this.getPaymentsByShipmentsId();
-
-
     //console.log(this.payments)
   },
   props: {
@@ -93,9 +100,9 @@ export default {
     getDisplayablePayment(payment) {
       payment.paymentMonthYearDate = this.getLongMonthName(new Date(payment.paymentDate));
       //console.log(payment.date)
-
+      
       payment.dateShort = payment.paymentDate.substring(0, 7);
-      //console.log(payment);
+      console.log(payment);
       return payment;
     },
     getPaymentsByShipmentsId() {
