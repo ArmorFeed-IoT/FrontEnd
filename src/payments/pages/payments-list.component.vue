@@ -10,7 +10,6 @@
         sort-field="dateShort"
         :sort-order="-1"
         :expandable-row-groups="true"
-
         expanded-row-icon="pi-eye-slash"
         collapsed-row-icon="pi-eye"
         v-model:expanded-row-groups="expandedRowGroups"
@@ -18,10 +17,21 @@
         @rowgroup-collapse="onRowGroupCollapse"
       >
         <pv-column field="paymentMonthYearDate" header="Date"></pv-column>
-        <pv-column field="shipmentId" header="Code Shipping"
-                   class="bg-gray-200 border-primary hover:bg-gray-500"></pv-column>
-        <pv-column field="paymentDate" header="Payment Date" class="bg-gray-200 border-primary"></pv-column>
-        <pv-column field="amount" header="Amount" class="bg-gray-200 border-primary">
+        <pv-column
+          field="shipmentId"
+          header="Code Shipping"
+          class="bg-gray-200 border-primary hover:bg-gray-500"
+        ></pv-column>
+        <pv-column
+          field="paymentDate"
+          header="Payment Date"
+          class="bg-gray-200 border-primary"
+        ></pv-column>
+        <pv-column
+          field="amount"
+          header="Amount"
+          class="bg-gray-200 border-primary"
+        >
           <template #body="slotProps">
             {{ formatCurrency(slotProps.data.amount) }}
           </template>
@@ -30,24 +40,30 @@
         <template #groupheader="slotProps">
           <div class="group-header">
             <div class="group-header-container">
-              <td class="group-header-container-item"> {{ slotProps.data.paymentMonthYearDate }}</td>
-              <td
-                class="group-header-container-item">
-                {{ calculatePaymentTotal(slotProps.data.paymentMonthYearDate)
-                }} payments
+              <td class="group-header-container-item">
+                {{ slotProps.data.paymentMonthYearDate }}
               </td>
-              <td
-                class="group-header-container-item"> S/.
-                {{ calculatePaymentTotalAmount(slotProps.data.paymentMonthYearDate)
+              <td class="group-header-container-item">
+                {{ calculatePaymentTotal(slotProps.data.paymentMonthYearDate) }}
+                payments
+              </td>
+              <td class="group-header-container-item">
+                S/.
+                {{
+                  calculatePaymentTotalAmount(
+                    slotProps.data.paymentMonthYearDate
+                  )
                 }}
               </td>
             </div>
           </div>
         </template>
 
-        <pv-column field="status" header="Status" class="bg-gray-200 border-primary"></pv-column>
-
-
+        <pv-column
+          field="status"
+          header="Status"
+          class="bg-gray-200 border-primary"
+        ></pv-column>
       </pv-data-table>
     </div>
   </div>
@@ -55,8 +71,8 @@
 
 <script>
 import { PaymentsApiService } from "../services/payments-api.service";
-import { EnterpriseShipmentsService} from "../../shipments/enterprise-shipments/services/enterprise-shipments.service";
-import { CustomerShipmentsApiService} from "../../shipments/customer-shipments/services/customer-shipments-api.service";
+import { EnterpriseShipmentsService } from "../../shipments/enterprise-shipments/services/enterprise-shipments.service";
+import { CustomerShipmentsApiService } from "../../shipments/customer-shipments/services/customer-shipments-api.service";
 
 export default {
   name: "payments-list",
@@ -69,8 +85,19 @@ export default {
       paymentsService: null,
       enterpriseShipmentService: null,
       customerShipmentService: null,
-      monthNames: ["January", "February", "March", "April", "May", "June",
-        "July", "August", "September", "October", "November", "December"
+      monthNames: [
+        "January",
+        "February",
+        "March",
+        "April",
+        "May",
+        "June",
+        "July",
+        "August",
+        "September",
+        "October",
+        "November",
+        "December",
       ],
 
       status: [
@@ -78,7 +105,7 @@ export default {
         { type: "Collected", code: "Collected" },
       ],
 
-      contact: ''
+      contact: "",
     };
   },
   created() {
@@ -91,64 +118,63 @@ export default {
     //console.log(this.payments)
   },
   props: {
-    isCustomer: Boolean
+    isCustomer: Boolean,
   },
   methods: {
     getLongMonthName(date) {
       return this.monthNames[date.getMonth()] + "-" + date.getFullYear();
     },
     getDisplayablePayment(payment) {
-      payment.paymentMonthYearDate = this.getLongMonthName(new Date(payment.paymentDate));
+      payment.paymentMonthYearDate = this.getLongMonthName(
+        new Date(payment.paymentDate)
+      );
       //console.log(payment.date)
-      
+
       payment.dateShort = payment.paymentDate.substring(0, 7);
       console.log(payment);
       return payment;
     },
     getPaymentsByShipmentsId() {
-      if(this.isCustomer) {
-        this.$dataTransfer.customerShipmentsIds.forEach(
-          (shipmentId) => {
-            this.paymentsService.findPaymentByShipmentId(shipmentId).then(
-              (payment) => {
-                this.payments.push(payment.data)
-                console.log(this.payments);
-                this.payments.forEach(
-                  (payment) =>
-                  {
-                    this.getDisplayablePayment(payment)}
-                );
-              }
-            );
-          }
-        );
+      if (this.isCustomer) {
+        this.$dataTransfer.customerShipmentsIds.forEach((shipmentId) => {
+          this.paymentsService
+            .findPaymentByShipmentId(shipmentId)
+            .then((payment) => {
+              this.payments.push(payment.data);
+              console.log(this.payments);
+              this.payments.forEach((payment) => {
+                this.getDisplayablePayment(payment);
+              });
+            });
+        });
         return;
       }
-      this.$dataTransfer.enterpriseShipmentsIds.forEach(
-        (shipmentId) => {
-          this.paymentsService.findPaymentByShipmentId(shipmentId).then(
-            (payment) => {
-              this.payments.push(payment.data);
-              this.payments.forEach(
-                (payment) =>
-                {
-                  this.getDisplayablePayment(payment)}
-              );
-            }
-          );
-        }
-      );
+      this.$dataTransfer.enterpriseShipmentsIds.forEach((shipmentId) => {
+        this.paymentsService
+          .findPaymentByShipmentId(shipmentId)
+          .then((payment) => {
+            this.payments.push(payment.data);
+            this.payments.forEach((payment) => {
+              this.getDisplayablePayment(payment);
+            });
+          });
+      });
       //console.log(this.payments);
     },
     onRowGroupExpand(event) {
-      this.$toast.add({ severity: "info", summary: "Row Group Expanded", detail: "Value: " + event.data, life: 3000 });
+      this.$toast.add({
+        severity: "info",
+        summary: "Row Group Expanded",
+        detail: "Value: " + event.data,
+        life: 3000,
+      });
     },
     onRowGroupCollapse(event) {
       this.$toast.add({
         severity: "success",
         summary: "Row Group Collapsed",
         detail: "Value: " + event.data,
-        life: 3000
+        life: 3000,
       });
     },
     calculatePaymentTotalAmount(date) {
@@ -175,15 +201,12 @@ export default {
     },
     formatCurrency(value) {
       return "S/. " + value;
-    }
-  }
-
+    },
+  },
 };
 </script>
 
 <style scoped>
-
-
 .group-header-container-item {
   display: block;
 }
@@ -201,7 +224,6 @@ export default {
 .group-header {
   display: inline-block;
   width: 85%;
-
 }
 
 .card-container {
@@ -216,19 +238,17 @@ export default {
 }
 
 h1 {
-  font-family: 'Roboto';
+  font-family: "Roboto";
   font-style: normal;
   font-weight: 500;
   font-size: 20px;
   text-align: center;
-  color: #5D5FEF;
+  color: #5d5fef;
   padding-top: 40px;
   letter-spacing: 0.03em;
 }
 
 .card {
-  background-color: #EEEEEE;
+  background-color: #eeeeee;
 }
-
-
 </style>

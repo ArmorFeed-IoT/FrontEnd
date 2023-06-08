@@ -36,7 +36,7 @@ export class DataTransferService {
     this._enterpriseShipmentsIds.push(customerShipmentId);
   }
 
-  clearShipmentsIds(){
+  clearShipmentsIds() {
     this._customerShipmentsIds = [];
     this._enterpriseShipmentsIds = [];
   }

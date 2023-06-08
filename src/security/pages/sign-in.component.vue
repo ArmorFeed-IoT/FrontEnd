@@ -60,7 +60,7 @@
 <script>
 import { required } from "@vuelidate/validators";
 import { useVuelidate } from "@vuelidate/core";
-import SignInService from "../../shared/services/sign-in.service";
+// import SignInService from "../../shared/services/sign-in.service";
 export default {
   name: "sign-in",
   setup: () => ({ v$: useVuelidate() }),
@@ -96,7 +96,7 @@ export default {
           })
           .catch((error) => {
             document.getElementById("password").focus();
-            console.log(error.message)
+            console.log(error.message);
           });
       }
       /*

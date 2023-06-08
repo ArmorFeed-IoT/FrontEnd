@@ -1,8 +1,17 @@
 <template>
   <div class="container">
-    <div class="flex flex-column space-between align-items-center" style="max-width: 45rem; width: 100%; margin: 0 auto; min-height: 90vh">
-      <customer-shipments-filter ref="customerShipmentFilter" @click="filterData"></customer-shipments-filter>
-      <customer-shipments-list ref="customerShipmentList" :id="this.id"></customer-shipments-list>
+    <div
+      class="flex flex-column space-between align-items-center"
+      style="max-width: 45rem; width: 100%; margin: 0 auto; min-height: 90vh"
+    >
+      <customer-shipments-filter
+        ref="customerShipmentFilter"
+        @click="filterData"
+      ></customer-shipments-filter>
+      <customer-shipments-list
+        ref="customerShipmentList"
+        :id="this.id"
+      ></customer-shipments-list>
     </div>
   </div>
 </template>
@@ -15,21 +24,23 @@ export default {
   name: "shipments-component",
   components: {
     CustomerShipmentsFilter,
-    CustomerShipmentsList
+    CustomerShipmentsList,
   },
   methods: {
-    filterData(){
-      this.$refs.customerShipmentList.filterContent(this.$refs.customerShipmentFilter.selectedItem);
-    }
+    filterData() {
+      this.$refs.customerShipmentList.filterContent(
+        this.$refs.customerShipmentFilter.selectedItem
+      );
+    },
   },
-  props : {
-    id: Number
-  }
-}
+  props: {
+    id: Number,
+  },
+};
 </script>
 <style>
 .container {
-  background-color: #E5ECED;
+  background-color: #e5eced;
   color: #fff;
 }
 </style>

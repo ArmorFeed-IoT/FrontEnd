@@ -144,7 +144,7 @@ export default {
       const payment = {
         amount: this.formObject.amount,
         currency: "USD",
-        paymentDate: this.formObject.pickUpDate
+        paymentDate: this.formObject.pickUpDate,
       };
       this.$emit("complete", {
         formData: {

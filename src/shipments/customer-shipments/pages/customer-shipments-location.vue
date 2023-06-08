@@ -12,7 +12,7 @@
         :position="m.position"
         :clickable="true"
         :draggable="true"
-        @click="center=m.position"
+        @click="center = m.position"
       />
     </GMapCluster>
   </GMapMap>
@@ -24,12 +24,12 @@ export default {
   name: "customer-shipments-location",
   data() {
     return {
-      center: {lat: -12.090795, lng: -77.023148},
+      center: { lat: -12.090795, lng: -77.023148 },
       markers: [
         {
           position: {
             lat: -12.090795,
-            lng: -77.023148
+            lng: -77.023148,
           },
         },
       ],
@@ -37,12 +37,11 @@ export default {
       locationService: null,
       location: [],
       columns: [
-        {field: 'lat', header: 'Lat'},
-        {field: 'lng', header: 'Lng'},
+        { field: "lat", header: "Lat" },
+        { field: "lng", header: "Lng" },
       ],
       currentLocation: [],
-
-    }
+    };
   },
   created() {
     this.locationService = new LocationsApiService();
@@ -51,6 +50,5 @@ export default {
       this.currentLocation = this.location;
     });
   },
-
-}
+};
 </script>
