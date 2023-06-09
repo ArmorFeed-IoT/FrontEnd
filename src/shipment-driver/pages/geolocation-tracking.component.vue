@@ -1,5 +1,5 @@
 <template>
-  <h1>Geolocation Driver</h1>
+  <p class="geolocation-title">Driver Current Location</p>
   <GMapMap
       :center="position"
       :zoom="18"
@@ -18,6 +18,7 @@
 
 <script>
 import { webSocketConnectionOptions } from '../../shared/services/ws-common';
+import { CustomerShipmentsApiService } from '../../shipments/customer-shipments/services/customer-shipments-api.service';
 export default {
     name: "geolocation-tracking",
     props: {
@@ -26,18 +27,33 @@ export default {
     },
     data() {
         return {
-            webSocket: new WebSocket(`${webSocketConnectionOptions.baseURL}/ws/${this.shipmentDriverId}`),
+            webSocket: null,
             position: {
                 lat: 51.093048, lng: 6.842120
             },
             trackingOptions: Object.freeze({
-                HIGH_ACCURACY : true,
-                MAX_CACHE_AGE_MILLISECOND : 30000,
-                MAX_NEW_POSITION_MILLISECOND : 5000
-            })
+                HIGH_ACCURACY : true
+            }),
+            customerId: null,
+            enterpriseId: null
         }
     },
     mounted() {
+        const shipmentApiService = new CustomerShipmentsApiService();
+
+        shipmentApiService.getShipmentById(this.shipmentId)
+            .then( response => {
+                this.customerId = response.data.customerId;
+                this.enterpriseId = response.data.enterpriseId;
+            }).catch( error => console.error(error) );
+
+        this.webSocket = new WebSocket(`${webSocketConnectionOptions.baseURL}/ws/${this.shipmentDriverId}`);
+        this.webSocket.onopen = function() {
+            console.log("Successfull socket connection");
+        }
+        this.webSocket.onclose = function() {
+            console.log("Socket connection closed");
+        }
         if(!navigator.geolocation) {
             console.error("Geolocation is not supported by your browser");
             return;
@@ -47,24 +63,24 @@ export default {
             enableHighAccuracy: this.trackingOptions.HIGH_ACCURACY,
             maximumAge: this.trackingOptions.MAX_CACHE_AGE_MILLISECOND,
             timeout: this.trackingOptions.MAX_NEW_POSITION_MILLISECOND,
-        })
-
-        this.webSocket.onopen = function() {
-            console.log("Successfull socket connection");
-        }
+        });
+    },
+    unmounted() {
+        this.webSocket.close();
     },
     methods: {
         sendMessageToClient() {
             const data = {
-                customerId: 2,
-                enterpriseId: 3,
+                customerId: this.customerId,
+                enterpriseId: this.enterpriseId,
                 data: {
                     latitude: this.position.lat,
                     longitude: this.position.lng,
                     height: 100
                 }
             }
-            this.webSocket.send(JSON.stringify(data));
+            if(this.webSocket.readyState === WebSocket.OPEN)
+                this.webSocket.send(JSON.stringify(data));
         },
         updateLocation(e) {
             console.log("Success ", e);
@@ -79,6 +95,9 @@ export default {
 }
 </script>
 
-<style>
-
+<style scoped>
+.geolocation-title {
+    font-size: 2rem;
+    text-align: center;
+}
 </style>

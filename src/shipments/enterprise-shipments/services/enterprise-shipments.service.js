@@ -2,7 +2,7 @@ import http from "../../../shared/services/http-common.js";
 
 export class EnterpriseShipmentsService {
   getShipmentsById(id) {
-    return http.get(`/shipments?enterpriseId=${id}`);
+    return http.get(`/enterprises/${id}/shipments`);
   }
   getCustomerById(id) {
     return http.get(`/customers/${id}`);

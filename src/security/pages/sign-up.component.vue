@@ -1,3 +1,5 @@
+<!-- eslint-disable prettier/prettier -->
+<!-- eslint-disable prettier/prettier -->
 <template>
   <div class="bg-sign-up">
     <div class="bg-white sign-up">
