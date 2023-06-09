@@ -42,6 +42,13 @@
       el="el"
     >
       <pv-button
+          icon="pi pi-user"
+          icon-pos="left"
+          class="p-button-text"
+          label="Configure Account"
+          @click="profileEdit"
+      ></pv-button>
+      <pv-button
         @click="logOut"
         icon="pi pi-power-off"
         class="p-button-text p-button-danger w-full"
@@ -140,6 +147,9 @@ export default {
       await this.$emit("sign-off");
       await this.$router.push({ name: "root" });
       this.$refs.op.hide();
+    },
+    profileEdit(){
+      this.$router.push(`/profile/${this.UserId()}`);
     },
     getAllShipmentsById(id) {
       const customerShipmentsService = new CustomerShipmentsApiService();
