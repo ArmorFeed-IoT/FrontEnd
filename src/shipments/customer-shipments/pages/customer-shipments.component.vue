@@ -28,10 +28,11 @@ export default {
   },
   methods: {
     filterData() {
-      this.$refs.customerShipmentList.filterContent(
-        this.$refs.customerShipmentFilter.selectedItem
-      );
-    },
+      const selectedStatus = this.$refs.customerShipmentFilter.selectedItem;
+      const selectedDepartment = this.$refs.customerShipmentFilter.selectedDepartment;
+      console.log(selectedDepartment);
+      this.$refs.customerShipmentList.filterContent(selectedStatus, selectedDepartment);
+  },
   },
   props: {
     id: Number,
