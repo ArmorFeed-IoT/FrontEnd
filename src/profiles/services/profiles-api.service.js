@@ -3,11 +3,11 @@ import authHeader from "../../security/services/auth-header";
 
 export class ProfilesApiService{
 
-    putCostumerById(id){
-        return http.put(`/customers/${id}`, authHeader());
+    putCostumerById(id, data){
+        return http.put(`/customers/${id}`, data);
     }
 
-    putEnterpriseById(id){
-        return http.put(`/enterprises/${id}`, authHeader());
+    putEnterpriseById(id, data){
+        return http.put(`/enterprises/${id}`, data);
     }
 }

@@ -33,6 +33,32 @@
             >Name is required.</small
             >
           </div>
+          <div class="field mx-2" v-if="profileType === 'enterprise'">
+            <pv-input-number
+              class="mb-2"
+              v-model="priceBase"
+              placeholder="Price Base"
+              mode="decimal"
+              :minFractionDigits="2"
+            ></pv-input-number>
+            <pv-input-number
+              class="mb-2"
+              v-model="factorWeight"
+              placeholder="Factor Weight"
+              mode="decimal"
+              :minFractionDigits="2"
+            ></pv-input-number>
+            <pv-input-number
+              v-model="shippingTime"
+              placeholder="Shipping Time"
+            ></pv-input-number>
+          </div>
+          <div class="field mx-2" v-else-if="profileType === 'customer'">
+            <pv-input-text
+              v-model="lastname"
+              placeholder="Lastname"
+            ></pv-input-text>
+          </div>
           <div class="field mx-2">
             <pv-input-text
                 v-model="description"
@@ -143,7 +169,6 @@
 import { required } from "@vuelidate/validators";
 import { useVuelidate } from "@vuelidate/core";
 import {ProfilesApiService} from "../services/profiles-api.service";
-import { EnterpriseShipmentsService } from "../../shipments/enterprise-shipments/services/enterprise-shipments.service";
 
 export default {
   name: "profile-component",
@@ -160,14 +185,19 @@ export default {
 
       userId: null,
       profileType: null,
+      lastname: null,
       name: null,
-      photo: null,
+      photo: String,
       ruc: null,
       cellPhone: null,
       description: null,
       email: null,
       password: null,
       passwordRepeat: null,
+
+      factorWeight:null,
+      shippingTime:null,
+      priceBase:null,
     };
   },
   computed: {
@@ -197,7 +227,8 @@ export default {
     };
   },
   watch:{
-    image: function(newVal, oldVal){
+    // eslint-disable-next-line vue/no-arrow-functions-in-watch
+    image: (newVal, oldVal) => {
       if (newVal){
         this.createBase64Image(newVal);
       }
@@ -221,6 +252,7 @@ export default {
         this.base64 = event.target.result;
       }
       reader.readAsDataURL(FileObject);
+      console.log(this.base64)
     },
     goToSaveEdit() {
       this.isConfirm = false;
@@ -231,20 +263,21 @@ export default {
     },
     editUser() {
       if (this.profileType === "customer") {
+        this.photo = "justatest"
         return {
-          email: this.auth.email,
+          email: this.email,
           password: this.password,
           name: this.name,
           ruc: this.ruc.split(" ").join(""),
           phoneNumber: this.cellPhone.split(" ").join(""),
           description: this.description,
-          photo: this.base64,
+          photo: this.photo,
           lastname: this.lastname,
           subscriptionPlan: 0,
         };
       }
       return {
-        email: this.auth.email,
+        email: this.email,
         password: this.password,
         name: this.name,
         ruc: this.ruc.split(" ").join(""),
@@ -263,13 +296,17 @@ export default {
         if (this.password === this.passwordRepeat) {
           this.notMatch = false;
           const editUser = this.editUser();
-          //const profileupdate = new ProfilesApiService();
-          console.log(editUser);
+          const profileupdate = new ProfilesApiService();
           if (this.profileType === "customer") {
-            //profileupdate.putCostumerById(this.userId)
+            profileupdate.putCostumerById(this.userId, editUser).then((response) => {
+              response.data
+              console.log(response.data)
+            });
 
           } else if (this.profileType === "enterprise") {
-            //profileupdate.putEnterpriseById(this.userId)
+            profileupdate.putEnterpriseById(this.userId, editUser).then((response) => {
+              response.data
+            });
           }
           /*
           const enterpriseShipmentsService = new EnterpriseShipmentsService();
@@ -295,11 +332,21 @@ export default {
     this.$nextTick(() => {
       const auth = JSON.parse(localStorage.getItem("auth"));
       this.userId = auth.id;
+      this.email = auth.email;
       this.name = auth.name;
       this.ruc = auth.ruc;
       this.cellPhone = auth.phoneNumber;
       this.description = auth.description;
       this.profileType = auth.userType;
+      if (this.profileType == "customer"){
+        this.lastname = auth.lastName
+      }
+      else if (this.profileType == "enterprise"){
+        this.factorWeight = auth.factorWeight
+        this.shippingTime = auth.shippingTime
+        this.priceBase = auth.priceBase
+
+      }
     });
   },
 };
