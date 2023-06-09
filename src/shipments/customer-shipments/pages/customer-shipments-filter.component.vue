@@ -68,6 +68,7 @@ export default {
   },
   mounted() {
     this.selectedItem = this.options[0];
+    this.selectedDepartment = this.departments[0];
   },
   methods: {
     handleClick() {
