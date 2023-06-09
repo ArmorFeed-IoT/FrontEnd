@@ -1,3 +1,3 @@
 export const webSocketConnectionOptions = {
-    baseURL: "ws://localhost:5017"
+    baseURL: "ws://armorfeedapiiot.azurewebsites.net"
 }
