@@ -68,6 +68,12 @@ const routes = [
     props: { enableListDialogs: true },
   },
   {
+    path: "/profile/:id",
+    name: "profile",
+    component: () => import("../profiles/pages/profiles.component.vue"),
+    props: true,
+  },
+  {
     path: "/customers/:id/quotations",
     props: true,
     component: CustomerQuotation,
