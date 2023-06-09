@@ -1,19 +1,21 @@
 <template>
-    <h1>Shipment Current Location</h1>
-    <GMapMap
-      :center="position"
-      :zoom="18"
-      map-type-id="terrain"
-      style="width: 500px; height: 300px"
-    >
-      <GMapCluster>
-        <GMapMarker
-            :position="position"
-            :clickable="true"
-            :draggable="true"
-        />
-      </GMapCluster>
-    </GMapMap>
+  <GMapMap
+    :center="center"
+    :zoom="16"
+    map-type-id="terrain"
+    style="width: 75vw; height: 25rem"
+  >
+    <GMapCluster>
+      <GMapMarker
+        :key="index"
+        v-for="(m, index) in markers"
+        :position="m.position"
+        :clickable="true"
+        :draggable="true"
+        @click="center=m.position"
+      />
+    </GMapCluster>
+  </GMapMap>
 </template>
 <script>
 import { webSocketConnectionOptions } from '../../../shared/services/ws-common';
@@ -21,14 +23,24 @@ export default {
   name: "customer-shipments-location",
   data() {
     return {
-      socketConnection: null,
-      position: {
-        lat: this.$dataTransfer.locationData.latitude,
-        lng: this.$dataTransfer.locationData.longitude
-      },
-      latitude: this.$dataTransfer.locationData.latitude,
-      longitude: this.$dataTransfer.locationData.longitude,
-      height: this.$dataTransfer.locationData.height
+      center: {lat: -12.090795, lng: -77.023148},
+      markers: [
+        {
+          position: {
+            lat: -12.090795,
+            lng: -77.023148
+          },
+        },
+      ],
+
+      locationService: null,
+      location: [],
+      columns: [
+        {field: 'lat', header: 'Lat'},
+        {field: 'lng', header: 'Lng'},
+      ],
+      currentLocation: [],
+
     }
   },
   mounted() {
@@ -52,9 +64,6 @@ export default {
         console.log(data);
     }
   },
-  props: {
-    customerId: Number
-  }
 
 }
 </script>

@@ -28,6 +28,11 @@
           class="bg-gray-200 border-primary"
         ></pv-column>
         <pv-column
+          field="numberPayments"
+          header="Number of Payments"
+          class="bg-gray-200 border-primary"
+        ></pv-column>
+        <pv-column
           field="amount"
           header="Amount"
           class="bg-gray-200 border-primary"
@@ -35,6 +40,16 @@
           <template #body="slotProps">
             {{ formatCurrency(slotProps.data.amount) }}
           </template>
+        </pv-column>
+
+        <pv-column
+          field="status"
+          header="Status"
+          class="bg-gray-200 border-primary"
+        >
+          <template #body="slotProps">
+            {{ slotProps.data.status }}
+          </template> 
         </pv-column>
 
         <template #groupheader="slotProps">
@@ -54,6 +69,9 @@
                     slotProps.data.paymentMonthYearDate
                   )
                 }}
+              </td>
+              <td class="group-header-container-item">
+                {{ slotProps.data.status }}
               </td>
             </div>
           </div>
@@ -100,7 +118,7 @@ export default {
         "December",
       ],
 
-      status: [
+      status_a: [
         { type: "Registered", code: "Registered" },
         { type: "Collected", code: "Collected" },
       ],
@@ -131,6 +149,7 @@ export default {
       //console.log(payment.date)
 
       payment.dateShort = payment.paymentDate.substring(0, 7);
+      console.log("------  PAYMENT -----")
       console.log(payment);
       return payment;
     },

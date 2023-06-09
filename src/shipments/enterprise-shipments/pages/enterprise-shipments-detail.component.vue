@@ -116,17 +116,18 @@
     </div>
   </div>
   <pv-dialog v-model:visible="dialogEnabled">
-  
+    <enterprise-shipments-location :enterpriseId="enterpriseId"></enterprise-shipments-location>
   </pv-dialog>
 </template>
 
 <script>
 import { EnterpriseShipmentsService } from "../services/enterprise-shipments.service.js";
 import ViewComment from "../../customer-shipments/pages/comments/view-comment.component.vue";
-import CustomerShipmentsLocation from "../../customer-shipments/pages/customer-shipments-location.vue";
+import EnterpriseShipmentsLocation from "./enterprise-shipments-location.vue";
+
 export default {
   name: "enterprise-shipments.detail",
-  components: { ViewComment, CustomerShipmentsLocation },
+  components: { ViewComment, EnterpriseShipmentsLocation },
   data() {
     return {
       customer: {},
