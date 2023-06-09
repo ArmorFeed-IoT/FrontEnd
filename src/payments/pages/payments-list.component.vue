@@ -2,8 +2,22 @@
   <div class="card">
     <h1>Payments received</h1>
     <div class="card-container">
+      <div class="filter-container">
+        <pv-drop-down
+          class="filter-dropdown"
+          v-model="selectedItem"
+          :options="options"
+          @change="handleClick"
+        >
+          <template #option="slotProps">
+            <div class="p-dropdown-car-option text-center text-1xl">
+              <span>{{ slotProps.option }}</span>
+            </div>
+          </template>
+        </pv-drop-down>
+    </div>
       <pv-data-table 
-        :value="payments"
+        :value="filteredPayments"
         row-group-mode="subheader"
         group-rows-by="paymentMonthYearDate"
         sort-mode="single"
@@ -76,12 +90,6 @@
             </div>
           </div>
         </template>
-
-        <pv-column
-          field="status"
-          header="Status"
-          class="bg-gray-200 border-primary"
-        ></pv-column>
       </pv-data-table>
     </div>
   </div>
@@ -103,6 +111,8 @@ export default {
       paymentsService: null,
       enterpriseShipmentService: null,
       customerShipmentService: null,
+      options: ["All", "Registed", "Collected"],
+      selectedItem: "All",
       monthNames: [
         "January",
         "February",
@@ -119,11 +129,12 @@ export default {
       ],
 
       status_a: [
-        { type: "Registered", code: "Registered" },
+        { type: "Registed", code: "Registed" },
         { type: "Collected", code: "Collected" },
       ],
 
       contact: "",
+      filteredPayments: []
     };
   },
   created() {
@@ -138,7 +149,18 @@ export default {
   props: {
     isCustomer: Boolean,
   },
+  mounted() {
+    this.handleClick();
+  },
   methods: {
+    handleClick() {
+      if (this.selectedItem === "All") {
+        this.filteredPayments = this.payments;
+      } else {
+        this.filteredPayments = this.payments.filter(payment => payment.status === this.selectedItem);
+      }
+  },
+    
     getLongMonthName(date) {
       return this.monthNames[date.getMonth()] + "-" + date.getFullYear();
     },
@@ -246,7 +268,7 @@ export default {
 
 .card-container {
   margin: 0 16% 0 16%;
-  padding: 2% 0 10% 0;
+  padding: 0% 0 10% 0;
 }
 
 @media (max-width: 500px) {
@@ -272,5 +294,18 @@ h1 {
 
 .align-right {
   text-align: right; /* Align the titles and items to the right */
+}
+.filter-container {
+  margin-right: 1rem;
+  margin-bottom: 2rem;
+  display: flex;
+  justify-content: flex-start;
+}
+
+.filter-dropdown {
+  text-align: center;
+  width: 10rem; /* Ajusta el ancho según tus necesidades */
+  margin-right: 1rem;
+  margin-left: 1rem; /* Ajusta el margen entre los list options */
 }
 </style>
