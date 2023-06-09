@@ -10,8 +10,8 @@
         sort-field="dateShort"
         :sort-order="-1"
         :expandable-row-groups="true"
-        expanded-row-icon="pi pi-eye-slash"
-        collapsed-row-icon="pi pi-eye"
+        expanded-row-icon="pi-eye-slash"
+        collapsed-row-icon="pi-eye"
         v-model:expanded-row-groups="expandedRowGroups"
         @rowgroup-expand="onRowGroupExpand"
         @rowgroup-collapse="onRowGroupCollapse"
@@ -76,6 +76,12 @@
             </div>
           </div>
         </template>
+
+        <pv-column
+          field="status"
+          header="Status"
+          class="bg-gray-200 border-primary"
+        ></pv-column>
       </pv-data-table>
     </div>
   </div>

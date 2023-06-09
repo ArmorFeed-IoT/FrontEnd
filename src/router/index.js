@@ -68,6 +68,12 @@ const routes = [
     props: { enableListDialogs: true },
   },
   {
+    path: "/profile/:id",
+    name: "profile",
+    component: () => import("../profiles/pages/profiles.component.vue"),
+    props: true,
+  },
+  {
     path: "/customers/:id/quotations",
     props: true,
     component: CustomerQuotation,
@@ -157,6 +163,18 @@ const routes = [
         "../Shipments/enterprise-shipments/pages/enterprise-shipments-detail.component.vue"
       ),
   },
+  {
+    path: "/shipment-driver/:id/shipments",
+    name: "driver-shipment-list",
+    component: () => import("../shipment-driver/pages/driver-shipments-list.component.vue"),
+    props: true
+  },
+  {
+    path: "/shipment-driver/:idDriver/shipments/:idShipment/geolocation",
+    name: "driver-shipment-location",
+    component:  () => import("../shipment-driver/pages/geolocation-tracking.component.vue"),
+    props: true
+  }
 ];
 
 const router = createRouter({

@@ -12,24 +12,23 @@
         :position="m.position"
         :clickable="true"
         :draggable="true"
-        @click="center = m.position"
+        @click="center=m.position"
       />
     </GMapCluster>
   </GMapMap>
 </template>
 <script>
-import { LocationsApiService } from "../services/locations-api.service";
-
+import { webSocketConnectionOptions } from '../../../shared/services/ws-common';
 export default {
   name: "customer-shipments-location",
   data() {
     return {
-      center: { lat: -12.090795, lng: -77.023148 },
+      center: {lat: -12.090795, lng: -77.023148},
       markers: [
         {
           position: {
             lat: -12.090795,
-            lng: -77.023148,
+            lng: -77.023148
           },
         },
       ],
@@ -37,18 +36,34 @@ export default {
       locationService: null,
       location: [],
       columns: [
-        { field: "lat", header: "Lat" },
-        { field: "lng", header: "Lng" },
+        {field: 'lat', header: 'Lat'},
+        {field: 'lng', header: 'Lng'},
       ],
       currentLocation: [],
-    };
+
+    }
   },
-  created() {
-    this.locationService = new LocationsApiService();
-    this.locationService.getAll().then((response) => {
-      this.location = response.data;
-      this.currentLocation = this.location;
-    });
+  mounted() {
+    this.socketConnection = new WebSocket(`${webSocketConnectionOptions.baseURL}/ws/${this.customerId}`)
+    this.socketConnection.onopen = () => {
+      console.log("Successfull socket connection");
+    }
+    this.socketConnection.onclose = function() {
+      console.log("Socket connection closed");
+    }
+    this.socketConnection.onmessage = (event) => {
+        const data = JSON.parse(event.data);
+        this.latitude = data.Latitude;
+        this.longitude = data.Longitude;
+        this.height = data.Height;
+        this.$dataTransfer.locationData.latitude = data.Latitude;
+        this.$dataTransfer.locationData.longitude = data.Longitude;
+        this.$dataTransfer.locationData.height = data.Height;
+        this.position.lat = data.Latitude;
+        this.position.lng = data.Longitude;
+        console.log(data);
+    }
   },
-};
+
+}
 </script>

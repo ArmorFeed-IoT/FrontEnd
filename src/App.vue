@@ -65,6 +65,18 @@ export default {
             name: "enterprise-shipments",
             params: { id: parseInt(this.userId) },
           });
+        } else if (this.userType === "shipment-driver") {
+          this.navigation = [
+            {
+              label: "My shipments",
+              icon: "pi pi-fw pi-calendar",
+              to: `/shipment-driver/${this.userId}/shipments`,
+            }
+          ];
+          this.$router.push({
+            name: "driver-shipment-list",
+            params: { id: parseInt(this.userId) },
+          });
         }
       }
     },
@@ -83,12 +95,12 @@ export default {
 <template>
   <div class="w-full">
     <app-navigation
-      v-bind:user-id="userId"
-      v-bind:user-type="userType"
-      v-bind:user-name="userName"
-      v-bind:navigation="navigation"
+      :userId="userId"
+      :userType="userType"
+      :userName="userName"
+      :navigation="navigation"
       :paramActiveTab="0"
-      v-on:sign-off="signOff"
+      @sign-off="signOff"
     ></app-navigation>
     <router-view v-on:user-logged="userLogged"></router-view>
     <app-footer></app-footer>

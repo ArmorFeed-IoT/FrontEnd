@@ -4,6 +4,11 @@ export class DataTransferService {
     this._enterpriseShipmentsIds = [];
     this._user = null;
     this._canDisplayNavigation = true;
+    this.locationData = {
+      latitude: null,
+      longitude: null,
+      height: null
+    }
   }
 
   get canDisplayNavigation() {
