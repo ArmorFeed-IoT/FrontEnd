@@ -290,7 +290,7 @@ export default {
       this.weight = this.getWeight();
       this.getAllEnterprises();
     });
-  }
+  },
 };
 </script>
 

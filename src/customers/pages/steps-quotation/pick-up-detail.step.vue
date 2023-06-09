@@ -40,10 +40,7 @@
             </div>
             <div class="field m-2">
               <label for="address" class="font-bold">Address</label>
-              <pv-input-text
-                id="address"
-                v-model="address"
-              ></pv-input-text>
+              <pv-input-text id="address" v-model="address"></pv-input-text>
               <small v-show="!v$.address.$model && submitted" class="p-error"
                 >Address is required.</small
               >
@@ -62,10 +59,7 @@
             </div>
             <div class="field m-2">
               <label for="reference" class="font-bold">Reference</label>
-              <pv-input-text
-                id="reference"
-                v-model="reference"
-              ></pv-input-text>
+              <pv-input-text id="reference" v-model="reference"></pv-input-text>
               <small v-show="!v$.reference.$model && submitted" class="p-error"
                 >Urbanization is required.</small
               >

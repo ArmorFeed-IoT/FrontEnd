@@ -16,7 +16,7 @@ export default {
   methods: {
     userLogged() {
       const auth = JSON.parse(localStorage.getItem("auth"));
-      console.log(auth)
+      console.log(auth);
       if (auth) {
         this.userId = auth.id;
         this.userType = auth.userType;

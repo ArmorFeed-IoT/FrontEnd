@@ -96,7 +96,7 @@ export default {
           })
           .catch((error) => {
             document.getElementById("password").focus();
-            console.log(error.message)
+            console.log(error.message);
           });
       }
       /*
