@@ -2,7 +2,7 @@
   <div class="card">
     <h1>Payments received</h1>
     <div class="card-container">
-      <pv-data-table
+      <pv-data-table 
         :value="payments"
         row-group-mode="subheader"
         group-rows-by="paymentMonthYearDate"
@@ -20,22 +20,22 @@
         <pv-column
           field="shipmentId"
           header="Code Shipping"
-          class="bg-gray-200 border-primary hover:bg-gray-500"
+          class="bg-gray-200 border-primary hover:bg-gray-500 align-right"
         ></pv-column>
         <pv-column
           field="paymentDate"
           header="Payment Date"
-          class="bg-gray-200 border-primary"
+          class="bg-gray-200 border-primary align-right"
         ></pv-column>
         <pv-column
           field="numberPayments"
-          header="Number of Payments"
-          class="bg-gray-200 border-primary"
+          header="N° of Payments"
+          class="bg-gray-200 border-primary align-right"
         ></pv-column>
         <pv-column
           field="amount"
           header="Amount"
-          class="bg-gray-200 border-primary"
+          class="bg-gray-200 border-primary align-right"
         >
           <template #body="slotProps">
             {{ formatCurrency(slotProps.data.amount) }}
@@ -45,7 +45,7 @@
         <pv-column
           field="status"
           header="Status"
-          class="bg-gray-200 border-primary"
+          class="bg-gray-200 border-primary align-right"
         >
           <template #body="slotProps">
             {{ slotProps.data.status }}
@@ -55,14 +55,14 @@
         <template #groupheader="slotProps">
           <div class="group-header">
             <div class="group-header-container">
-              <td class="group-header-container-item">
+              <td class="group-header-container-item align-right">
                 {{ slotProps.data.paymentMonthYearDate }}
               </td>
-              <td class="group-header-container-item">
+              <td class="group-header-container-item align-right">
                 {{ calculatePaymentTotal(slotProps.data.paymentMonthYearDate) }}
                 payments
               </td>
-              <td class="group-header-container-item">
+              <td class="group-header-container-item align-right">
                 S/.
                 {{
                   calculatePaymentTotalAmount(
@@ -70,7 +70,7 @@
                   )
                 }}
               </td>
-              <td class="group-header-container-item">
+              <td class="group-header-container-item align-right">
                 {{ slotProps.data.status }}
               </td>
             </div>
@@ -230,13 +230,12 @@ export default {
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  min-width: 300px;
-  padding-left: 25%;
+  padding-left: 20%;
 }
 
 .group-header {
   display: inline-block;
-  width: 85%;
+  width: 95%;
 }
 
 .card-container {
@@ -263,5 +262,9 @@ h1 {
 
 .card {
   background-color: #eeeeee;
+}
+
+.align-right {
+  text-align: right; /* Align the titles and items to the right */
 }
 </style>

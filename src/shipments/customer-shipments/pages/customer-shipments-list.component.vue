@@ -25,6 +25,7 @@
 </template>
 
 <script>
+import { and } from "@vuelidate/validators";
 import { CustomerShipmentsApiService } from "../services/customer-shipments-api.service.js";
 
 export default {
@@ -67,17 +68,31 @@ export default {
         console.log(this.id);
       });
   },
-  methods: {
-    filterContent(status) {
-      if (status === "All") {
+    methods: {
+    filterContent(status, department) {
+      if (status === "All" && department === "All") {
         this.currentCustomerShipments = this.customerShipments;
         return;
       }
-      this.currentCustomerShipments = this.customerShipments.filter(
-        (shipment) => {
+      if(status === "All" && department !== "All"){
+        this.currentCustomerShipments = this.customerShipments.filter((shipment) => {
+          console.log(shipment.origin===department);
+          return shipment.origin === department;
+        });
+        return;
+      }
+      if(status !== "All" && department === "All"){
+        this.currentCustomerShipments = this.customerShipments.filter((shipment) => {
+          console.log(shipment.origin===department);
           return shipment.status === status;
-        }
-      );
+        });
+        return;
+      }
+
+      this.currentCustomerShipments = this.customerShipments.filter((shipment) => {
+          console.log(shipment.origin===department);
+          return shipment.status === status && shipment.origin === department;
+        });
     },
   },
   props: {
