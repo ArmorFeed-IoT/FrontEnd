@@ -1,6 +1,6 @@
 import axios from "axios";
 
 export default axios.create({
-  baseURL: "https://armorfeedapiiot.azurewebsites.net/api/v1/",
+  baseURL: "https://armorfeedapi.azurewebsites.net/api/v1/",
   headers: { "Content-type": "application/json" },
 });
