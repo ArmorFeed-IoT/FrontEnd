@@ -1,5 +1,7 @@
 <!-- eslint-disable prettier/prettier -->
 <!-- eslint-disable prettier/prettier -->
+<!-- eslint-disable prettier/prettier -->
+<!-- eslint-disable prettier/prettier -->
 <template>
   <div class="bg-sign-up">
     <div class="bg-white sign-up">
@@ -53,6 +55,9 @@
               mode="decimal"
               :minFractionDigits="2"
             ></pv-input-number>
+            <small v-if="v$.priceBase.$error" class="p-error">
+                {{ v$.priceBase.$errors[0].$message }}
+            </small>
             <pv-input-number
               class="mb-2"
               v-model="factorWeight"
@@ -220,6 +225,7 @@
       </form>
     </div>
   </div>
+  <pv-toast />
 </template>
 
 <script>
@@ -298,6 +304,9 @@ export default {
       accept: {
         required,
       },
+      photo: {
+        required
+      }
     };
   },
   methods: {
@@ -360,38 +369,104 @@ export default {
     },
     async handleSubmit(isFormValid) {
       this.submitted = true;
-      if (isFormValid) {
-        if (this.password === this.passwordRepeat) {
-          this.notMatch = false;
-          const newUser = this.createNewUser();
-          console.log(newUser);
-          if (this.userType === "customer") {
-            this.$store
-              .dispatch("auth/registerCustomer", newUser)
-              .then((response) => {
-                this.isConfirm = true;
-                this.resetForm();
-                console.log(response.data);
+
+      if (!isFormValid) {
+        this.$toast.add({
+          severity: "error",
+          summary: "Form data invalid",
+          detail: "Form fields values are invalid. Check it and try again.",
+          life: 3000,
+        });
+        return;
+      }
+      if(this.password !== this.passwordRepeat) {
+        this.notMatch = true;
+        this.$toast.add({
+          severity: "error",
+          summary: "Entered password does not match",
+          detail: "Both entered passwords does not match",
+          life: 3000,
+        });
+        return;
+      }
+      this.notMatch = false;
+      const newUser = this.createNewUser();
+      console.log(newUser);
+      if (this.userType === "customer") {
+        this.$store
+          .dispatch("auth/registerCustomer", newUser)
+          .then((response) => {
+            this.isConfirm = true;
+            this.resetForm();
+            console.log(response.data);
+            this.$toast.add({
+              severity: "success",
+              summary: "User registered successfully",
+              detail: "You are able to log in",
+              life: 3000,
+            });
+          })
+          .catch(
+            error => {
+              console.error(error);
+              this.$toast.add({
+                severity: "error",
+                summary: "An error occured while trying to ",
+                detail: "Both entered passwords does not match",
+                life: 3000,
               });
-          } else if (this.userType === "enterprise") {
-            this.$store
-              .dispatch("auth/registerEnterprise", newUser)
-              .then((response) => {
-                this.isConfirm = true;
-                this.resetForm();
-                console.log(response.data);
+            }
+          );
+      } else if (this.userType === "enterprise") {
+        this.$store
+          .dispatch("auth/registerEnterprise", newUser)
+          .then((response) => {
+            this.isConfirm = true;
+            this.resetForm();
+            console.log(response.data);
+            this.$toast.add({
+              severity: "success",
+              summary: "User registered successfully",
+              detail: "You are able to log in",
+              life: 3000,
+            });
+          })
+          .catch(
+            error => {
+              console.error(error);
+              this.$toast.add({
+                severity: "error",
+                summary: "An error occured while trying to ",
+                detail: "Both entered passwords does not match",
+                life: 3000,
               });
-          } else if (this.userType === "shipment-driver") {
-            this.$store
-              .dispatch("auth/registerShipmentDriver", newUser)
-              .then((response) => {
-                this.isConfirm = true;
-                this.resetForm();
-                console.log(response.data);
+            }
+          );
+      } else if (this.userType === "shipment-driver") {
+        this.$store
+          .dispatch("auth/registerShipmentDriver", newUser)
+          .then((response) => {
+            this.isConfirm = true;
+            this.resetForm();
+            console.log(response.data);
+            this.$toast.add({
+              severity: "success",
+              summary: "User registered successfully",
+              detail: "You are able to log in",
+              life: 3000,
+            });
+          })
+          .catch(
+            error => {
+              console.error(error);
+              this.$toast.add({
+                severity: "error",
+                summary: "An error occured while trying to ",
+                detail: "Both entered passwords does not match",
+                life: 3000,
               });
-          }
-          // this.signUpUser(newUser);
-        } else this.notMatch = true;
+            }
+          );
       }
     },
     resetForm() {
