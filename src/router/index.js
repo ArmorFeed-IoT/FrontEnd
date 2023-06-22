@@ -152,7 +152,7 @@ const routes = [
     name: "Customer shipment detail",
     component: () =>
       import(
-        "../Shipments/customer-shipments/pages/customer-shipments-detail.component.vue"
+        "../shipments/customer-shipments/pages/customer-shipments-detail.component.vue"
       ),
   },
   {
@@ -160,7 +160,7 @@ const routes = [
     name: "Enterprise shipment detail",
     component: () =>
       import(
-        "../Shipments/enterprise-shipments/pages/enterprise-shipments-detail.component.vue"
+        "../shipments/enterprise-shipments/pages/enterprise-shipments-detail.component.vue"
       ),
   },
   {
