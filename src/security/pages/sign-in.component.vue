@@ -55,6 +55,7 @@
       </form>
     </div>
   </div>
+  <pv-toast />
 </template>
 
 <script>
@@ -86,6 +87,7 @@ export default {
     async handleSubmit(isFormValid) {
       this.submitted = true;
       this.notFound = false;
+
       if (isFormValid) {
         const loginResource = this.loginDto();
         this.$store
@@ -96,7 +98,12 @@ export default {
           })
           .catch((error) => {
             document.getElementById("password").focus();
-            console.log(error.message);
+            this.$toast.add({
+              severity: "error",
+              summary: "Upps !!",
+              detail: error.response.data.message,
+              life: 3000,
+            });
           });
       }
       /*
