@@ -25,7 +25,6 @@
 </template>
 
 <script>
-import { and } from "@vuelidate/validators";
 import { CustomerShipmentsApiService } from "../services/customer-shipments-api.service.js";
 
 export default {

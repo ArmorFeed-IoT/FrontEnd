@@ -55,9 +55,6 @@
               mode="decimal"
               :minFractionDigits="2"
             ></pv-input-number>
-            <small v-if="v$.priceBase.$error" class="p-error">
-                {{ v$.priceBase.$errors[0].$message }}
-            </small>
             <pv-input-number
               class="mb-2"
               v-model="factorWeight"

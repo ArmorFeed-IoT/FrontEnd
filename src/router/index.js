@@ -32,6 +32,18 @@ const routes = [
     props: true,
   },
   {
+    path: "/enterprise/:id/shipment-drivers",
+    name: "enterprise-shipment-drivers",
+    component: () => import("../shipment-driver/enterprise-shipment-drivers/pages/enterprise-shipment-drivers-list.component.vue"),
+    props: true
+  },
+  {
+    path: "/enterprise/:enterpriseId/shipment-drivers/:shipmentDriverId/shipments",
+    name: "enterprise-shipment-driver-shipments",
+    component: () => import("../shipment-driver/enterprise-shipment-drivers/pages/enterprise-shipment-driver-shipment-list.component.vue"),
+    props: true
+  },
+  {
     path: "/customers/:id/shipments",
     name: "client-shipments",
     component: () =>
