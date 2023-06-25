@@ -37,15 +37,11 @@
               v-model="userType"
               placeholder="I want..."
             ></pv-dropdown>
-            <small v-show="!v$.userType.$model && submitted" class="p-error"
-              >There field is required.</small
-            >
+            <small v-show="!v$.userType.$model && submitted" class="p-error">There field is required.</small>
           </div>
           <div class="field mx-2">
             <pv-input-text v-model="name" placeholder="Name"></pv-input-text>
-            <small v-show="!v$.name.$model && submitted" class="p-error"
-              >Name is required.</small
-            >
+            <small v-show="!v$.name.$model && submitted" class="p-error">Name is required.</small>
           </div>
           <div class="field mx-2" v-if="userType === 'enterprise'">
             <pv-input-number
@@ -376,6 +372,7 @@ export default {
         });
         return;
       }
+
       if(this.password !== this.passwordRepeat) {
         this.notMatch = true;
         this.$toast.add({
@@ -386,9 +383,11 @@ export default {
         });
         return;
       }
+
       this.notMatch = false;
       const newUser = this.createNewUser();
       console.log(newUser);
+
       if (this.userType === "customer") {
         this.$store
           .dispatch("auth/registerCustomer", newUser)
@@ -406,12 +405,22 @@ export default {
           .catch(
             error => {
               console.error(error);
-              this.$toast.add({
-                severity: "error",
-                summary: "An error occured while trying to ",
-                detail: "Both entered passwords does not match",
-                life: 3000,
-              });
+
+              if (error.response.status === 400) {
+                this.$toast.add({
+                  severity: "info",
+                  summary: "Hey friend !!",
+                  detail: error.response.data.message,
+                  life: 3000,
+                });
+              } else {
+                this.$toast.add({
+                  severity: "error",
+                  summary: "An error occured while trying to register the user",
+                  detail: "Try again later",
+                  life: 3000,
+                });
+              }
             }
           );
       } else if (this.userType === "enterprise") {
@@ -434,7 +443,7 @@ export default {
               this.$toast.add({
                 severity: "error",
                 summary: "An error occured while trying to ",
-                detail: "Both entered passwords does not match",
+                detail: "Try again later",
                 life: 3000,
               });
             }
@@ -459,7 +468,7 @@ export default {
               this.$toast.add({
                 severity: "error",
                 summary: "An error occured while trying to ",
-                detail: "Both entered passwords does not match",
+                detail: "Try again later",
                 life: 3000,
               });
             }
