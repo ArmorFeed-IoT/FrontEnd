@@ -59,6 +59,12 @@
               placeholder="Lastname"
             ></pv-input-text>
           </div>
+          <div class="field mx-2" v-else-if="profileType === 'shipmentdriver'">
+            <pv-input-text
+              v-model="lastname"
+              placeholder="Lastname"
+            ></pv-input-text>
+          </div>
           <div class="field mx-2">
             <pv-input-text
                 v-model="description"
@@ -300,6 +306,9 @@ export default {
         name: this.name,
         ruc: this.ruc.split(" ").join(""),
         phoneNumber: this.cellPhone.split(" ").join(""),
+        description: this.description,
+        lastname: this.lastname,
+        enterpriseId: this.auth.enterpriseId
       };
     },
     async handleSubmit(isFormValid) {
