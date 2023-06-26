@@ -371,7 +371,9 @@ export default {
         this.factorWeight = auth.factorWeight
         this.shippingTime = auth.shippingTime
         this.priceBase = auth.priceBase
-
+      }
+      else {
+        this.lastname = auth.lastName
       }
     });
   },
