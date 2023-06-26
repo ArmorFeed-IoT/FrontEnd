@@ -10,4 +10,8 @@ export class ProfilesApiService{
     putEnterpriseById(id, data){
         return http.put(`/enterprises/${id}`, data);
     }
+
+    putShipmentDriverById(id, data){
+        return http.put(`shipmentdriver/${id}`, data);
+    }
 }

@@ -242,8 +242,11 @@ export default {
       if (this.profileType == "customer"){
         this.$router.push(`/customers/${this.userId}/quotations`);
       }
-      else {
+      else if (this.profileType == "enterprise"){
         this.$router.push(`/enterprise/${this.userId}/shipments`);
+      }
+      else {
+        this.$router.push(`/shipment-driver/${this.userId}/shipments`);
       }
     },
     createBase64Image: function(FileObject){
@@ -271,9 +274,24 @@ export default {
           ruc: this.ruc.split(" ").join(""),
           phoneNumber: this.cellPhone.split(" ").join(""),
           description: this.description,
-          photo: this.photo,
+          photo: this.base64,
           lastname: this.lastname,
           subscriptionPlan: 0,
+        };
+      }
+      else if (this.profileType === "enterprise"){
+        return {
+          email: this.email,
+          password: this.password,
+          name: this.name,
+          ruc: this.ruc.split(" ").join(""),
+          phoneNumber: this.cellPhone.split(" ").join(""),
+          priceBase: this.priceBase,
+          factorWeight: this.factorWeight,
+          shippingTime: this.shippingTime,
+          description: this.description,
+          photo: this.base64,
+          score: this.score,
         };
       }
       return {
@@ -282,12 +300,6 @@ export default {
         name: this.name,
         ruc: this.ruc.split(" ").join(""),
         phoneNumber: this.cellPhone.split(" ").join(""),
-        priceBase: this.priceBase,
-        factorWeight: this.factorWeight,
-        shippingTime: this.shippingTime,
-        description: this.description,
-        photo: this.base64,
-        score: this.score,
       };
     },
     async handleSubmit(isFormValid) {
@@ -305,6 +317,11 @@ export default {
 
           } else if (this.profileType === "enterprise") {
             profileupdate.putEnterpriseById(this.userId, editUser).then((response) => {
+              response.data
+            });
+          }
+          else {
+            profileupdate.putShipmentDriverById(this.userId, editUser).then((response) => {
               response.data
             });
           }
