@@ -59,10 +59,12 @@ export default {
             return;
         }
 
+        navigator.geolocation.getCurrentPosition(this.updateLocation,this.errorInLocation, {
+            enableHighAccuracy: this.trackingOptions.HIGH_ACCURACY,
+        });
+
         navigator.geolocation.watchPosition(this.updateLocation, this.errorInLocation, {
             enableHighAccuracy: this.trackingOptions.HIGH_ACCURACY,
-            maximumAge: this.trackingOptions.MAX_CACHE_AGE_MILLISECOND,
-            timeout: this.trackingOptions.MAX_NEW_POSITION_MILLISECOND,
         });
     },
     unmounted() {
