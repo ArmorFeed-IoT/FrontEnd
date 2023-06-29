@@ -38,7 +38,8 @@ export default {
                 HIGH_ACCURACY : true
             }),
             customerId: null,
-            enterpriseId: null
+            enterpriseId: null,
+            watchId: null
         }
     },
     mounted() {
@@ -66,13 +67,13 @@ export default {
             enableHighAccuracy: this.trackingOptions.HIGH_ACCURACY,
         });
 
-        navigator.geolocation.watchPosition(this.updateLocation, this.errorInLocation, {
+        this.watchId = navigator.geolocation.watchPosition(this.updateLocation, this.errorInLocation, {
             enableHighAccuracy: this.trackingOptions.HIGH_ACCURACY,
         });
     },
     unmounted() {
         this.webSocket.close();
-        navigator.geolocation.clearWatch();
+        navigator.geolocation.clearWatch(this.watchId);
     },
     methods: {
         sendMessageToClient() {
