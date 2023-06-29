@@ -72,6 +72,7 @@ export default {
     },
     unmounted() {
         this.webSocket.close();
+        navigator.geolocation.clearWatch();
     },
     methods: {
         sendMessageToClient() {
