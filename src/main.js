@@ -26,6 +26,7 @@ import VueGoogleMaps from "@fawmi/vue-google-maps";
 import Image from "primevue/image";
 import Store from "./store";
 import FileUpload from "primevue/fileupload";
+import Skeleton from 'primevue/skeleton';
 
 //PrimeVue Styles
 import "/node_modules/primeflex/primeflex.css";
@@ -90,4 +91,5 @@ app.component("pv-timeline", Timeline);
 app.component("pv-scroll-panel", ScrollPanel);
 app.component("pv-image", Image);
 app.component("pv-file-upload", FileUpload);
+app.component("pv-skeleton", Skeleton);
 app.mount("#app");

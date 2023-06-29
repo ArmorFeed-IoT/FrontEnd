@@ -1,6 +1,8 @@
 <template>
   <p class="geolocation-title">Driver Current Location</p>
+  <pv-skeleton v-if="mapVisible === false" width="10rem" height="4rem"></pv-skeleton>
   <GMapMap
+    v-if="mapVisible"
       :center="position"
       :zoom="18"
       map-type-id="terrain"
@@ -31,6 +33,7 @@ export default {
             position: {
                 lat: 51.093048, lng: 6.842120
             },
+            mapVisible: false,
             trackingOptions: Object.freeze({
                 HIGH_ACCURACY : true
             }),
@@ -88,6 +91,9 @@ export default {
             console.log("Success ", e);
             this.position.lat = e.coords.latitude;
             this.position.lng = e.coords.longitude;
+            if(this.mapVisible === false) {
+                this.mapVisible = true;
+            }
             this.sendMessageToClient();
         },
         errorInLocation(err) {
